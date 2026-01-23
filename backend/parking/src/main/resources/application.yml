@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: parking
+
+jwt:
+#  need 32 char
+  secret: tohkesehaiaaplogtohkesehaiaaplog
+  expiration: 86400000
