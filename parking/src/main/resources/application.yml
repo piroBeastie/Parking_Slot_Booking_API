@@ -4,5 +4,5 @@ spring:
 
 jwt:
 #  need 32 char
-  secret: tohkesehaiaaplogtohkesehaiaaplog
+  secret: YOUR-SECRET-HERE (32 CHAR)
   expiration: 86400000
