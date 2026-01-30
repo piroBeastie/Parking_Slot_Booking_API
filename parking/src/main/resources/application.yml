@@ -4,8 +4,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: beastieapis@gmail.com
-    password: mfpbmrqvmwyozwvn
+    username: YOUR-EMAIL-HERE
+    password: APP-PASSWORD-HERE
     properties:
       mail:
         smtp:
