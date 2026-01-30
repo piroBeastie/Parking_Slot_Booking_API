@@ -56,15 +56,7 @@ public class ParkingSlotController {
         return ResponseEntity.ok(parkingSlotService.getAllSlots(pageable));
     }
 
-    @GetMapping("/available")
-    public ResponseEntity<Page<ParkingSlot>> getAvailableSlots(
-            @RequestParam boolean available,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size){
-        Pageable pageable = PageRequest.of(page, size);
 
-        return ResponseEntity.ok(parkingSlotService.getAvailableSlots(available, pageable));
-    }
 
     @GetMapping("/search")
     public ResponseEntity<Page<ParkingSlot>> searchByLocation(

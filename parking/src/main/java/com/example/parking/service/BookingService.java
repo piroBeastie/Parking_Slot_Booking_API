@@ -3,8 +3,10 @@ package com.example.parking.service;
 import com.example.parking.model.Booking;
 import com.example.parking.model.BookingStatus;
 import com.example.parking.model.ParkingSlot;
+import com.example.parking.model.User;
 import com.example.parking.repository.BookingRepository;
 import com.example.parking.repository.ParkingSlotRepository;
+import com.example.parking.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -14,10 +16,14 @@ import java.time.LocalDateTime;
 public class BookingService {
     private final BookingRepository bookingRepository;
     private final ParkingSlotRepository parkingSlotRepository;
+    private final EmailService emailService;
+    private final UserRepository userRepository;
 
-    public BookingService(BookingRepository bookingRepository, ParkingSlotRepository parkingSlotRepository) {
+    public BookingService(BookingRepository bookingRepository, ParkingSlotRepository parkingSlotRepository, EmailService emailService, UserRepository userRepository) {
         this.bookingRepository = bookingRepository;
         this.parkingSlotRepository = parkingSlotRepository;
+        this.emailService = emailService;
+        this.userRepository = userRepository;
     }
 
     public Booking createBooking(String userId, String parkingSlotId, LocalDateTime startTime, LocalDateTime endTime){
@@ -49,6 +55,17 @@ public class BookingService {
         booking.setTotalPrice(totalPrice);
         booking.setStatus(BookingStatus.BOOKED);
 
+        User user = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("User not found"));
+
+        emailService.sendEmail(
+                user.getEmail(),
+                "Parking Slot Booked",
+                "Your booking is confirmed.\nSlot: " + slot.getSlotNumber() +
+                        "\nFrom: " + startTime +
+                        "\nTo: " + endTime +
+                        "\nTotal: ₹" + totalPrice
+        );
+
         return bookingRepository.save(booking);
     }
 
@@ -71,6 +88,15 @@ public class BookingService {
 
         slot.setAvailable(true);
         parkingSlotRepository.save(slot);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        emailService.sendEmail(
+                user.getEmail(),
+                "Booking Cancelled",
+                "Your booking has been cancelled.\nBooking ID: " + bookingId
+        );
 
         return bookingRepository.save(booking);
     }

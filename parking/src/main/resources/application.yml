@@ -1,6 +1,17 @@
 spring:
   application:
     name: parking
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: beastieapis@gmail.com
+    password: mfpbmrqvmwyozwvn
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 jwt:
 #  need 32 char

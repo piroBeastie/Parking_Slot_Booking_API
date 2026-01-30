@@ -4,6 +4,7 @@ import com.example.parking.model.Booking;
 import com.example.parking.service.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PostMapping
     public ResponseEntity<Booking> createBooking(
             @RequestParam String parkingSlotId,
@@ -32,6 +34,7 @@ public class BookingController {
         return new ResponseEntity<>(booking, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PutMapping("/{bookingId}/cancel")
     public ResponseEntity<Booking> cancelBooking(
             @PathVariable String bookingId,
